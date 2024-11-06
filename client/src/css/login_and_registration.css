@@ -1,0 +1,19 @@
+.logSection{
+    margin: 20% auto;
+    width: 11rem;
+    height: 11rem;
+    border: 1px solid black;
+    position: relative;
+    padding: 10px;
+}
+.btn{
+    text-align: center;
+    width: 11rem;
+    height: 2rem;
+    position: absolute;
+    margin-top: 4rem;
+    background-color: cornflowerblue;
+}
+.btn:hover{
+    border: 1px solid black;
+}
