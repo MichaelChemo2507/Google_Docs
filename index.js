@@ -1,4 +1,4 @@
-// npm i express mysql2
+// npm i express mysql2 bcrypt
 const express = require('express');
 const port =2507;
 const app  = express();
