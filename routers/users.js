@@ -10,3 +10,5 @@ router.get('/:id', [UsersController.getById], (req, res) => {
 })
 router.post('/', [UsersController.addUser], (req, res) => {
 })
+router.post('/login', [UsersController.login], (req, res) => {
+})

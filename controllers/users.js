@@ -33,9 +33,28 @@ async function addUser(req, res, next) {
     })
     next();    
 }
+async function login(req, res, next) {
+    let { email, password } = req.body;
+    db.query(`SELECT * FROM users WHERE email = ${email}`, async (error, results) => {
+        if (error) throw error;
+
+        if (results.length === 0) {
+            return res.status(400).json({ invalid:true });
+          }
+          let user = results[0];
+          let isMatch = await bcrypt.compare(password, user.password);
+          if (!isMatch) {
+            return res.status(400).json({ invalid:true });
+          }
+          const token = jwt.sign({ email: user.email }, process.env.JWT, { expiresIn: '1h' });
+          res.status(200).json({ token });
+    })
+    next();    
+}
 
 module.exports = {
     getAllUsers: getAllUsers,
     getById: getById,
-    addUser: addUser
+    addUser: addUser,
+    login:login
 }
