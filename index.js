@@ -1,8 +1,11 @@
-// npm i express mysql2 bcrypt
+// npm i express mysql2 bcryptjs jsonwebtoken body-parser
 const express = require('express');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const port =2507;
-const app  = express();
+const app = express();
 app.use(express.json());
+
 
 let db_M = require('./config/db_config.js');
 global.db_pool = db_M.pool;
