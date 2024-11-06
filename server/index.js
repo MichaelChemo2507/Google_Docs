@@ -1,8 +1,10 @@
 // npm i express mysql2 bcryptjs jsonwebtoken body-parser
 const express = require('express');
-const port =2507;
+const port =3005;
 const app = express();
 app.use(express.json());
+
+
 
 
 let db_M = require('./config/db_config.js');
@@ -15,5 +17,5 @@ const users_router = require('./routers/users.js');
 app.use('/users',users_router);
 
 app.listen(port,()=>{
-    console.log(`now listening on port ${port} http://localhost:2507`);
+    console.log(`now listening on port ${port} http://localhost:3005`);
 })

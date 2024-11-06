@@ -7,8 +7,8 @@ async function getAllUsers(req, res, next) {
     let db_promise = db_pool.promise();
     try {
         res.status(200).json(await db_promise.query('SELECT * FROM users'));
-    }catch (err){
-        return res.status(500).json({message: err});
+    }catch (error){
+        return res.status(500).json({message: error});
     }
     next();
 }
@@ -17,8 +17,8 @@ async function getById(req,res,next) {
     let db_promise = db_pool.promise();
     try {
         res.status(200).json(await db_promise.query(query));
-    }catch (err){
-        return res.status(500).json({message: err});
+    }catch (error){
+        return res.status(500).json({message: error});
     }
     next();
 }
@@ -26,7 +26,7 @@ async function addUser(req, res, next) {
     let { email, password } = req.body;
     let query = `SELECT * FROM users WHERE email = '${email}'`;
     db_pool.query(query, async (error, results) => {
-        if (error) throw error;
+        if (error) return res.status(500).json({message: error});;
         if (results.length > 0) return res.status(400).json({ isExists: true }); // move to login page
 
         let hashedPassword = await bcrypt.hash(password, 10);
@@ -42,7 +42,7 @@ async function login(req, res, next) {
     let { email, password } = req.body;
     let query = `SELECT * FROM users WHERE email = '${email}'`;
     db_pool.query(query, async (error, results) => {
-        if (error) throw error;
+        if (error) res.status(500).json({ invalid:error });
 
         if (results.length === 0) {
             return res.status(400).json({ invalid:true });

@@ -1,5 +1,6 @@
 {
   "name": "google_docs_app",
+  "proxy": "http://localhost:3005",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
