@@ -1,7 +1,5 @@
 // npm i express mysql2 bcryptjs jsonwebtoken body-parser
 const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const port =2507;
 const app = express();
 app.use(express.json());

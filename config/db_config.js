@@ -1,5 +1,5 @@
 const mysql = require('mysql2');
-const  params = process.env;
+let params = require('./gen_params');
 let HOST     =params.HOST     ;
 let USER     =params.USER     ;
 let PASSWORD =params.PASSWORD ;

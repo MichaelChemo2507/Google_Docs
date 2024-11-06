@@ -1,18 +1,22 @@
-async function getAllUsers(req,res,next) {
-    let Query = `SELECT * FROM users`;
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const JWT_KEY = require('../config/gen_params').JWT;
+
+async function getAllUsers(req, res, next) {
+
     let db_promise = db_pool.promise();
     try {
-        res.status(200).json(await db_promise.query(Query));
+        res.status(200).json(await db_promise.query('SELECT * FROM users'));
     }catch (err){
         return res.status(500).json({message: err});
     }
     next();
 }
 async function getById(req,res,next) {
-    let Query = `SELECT * FROM users WHERE user_id = ${req.params.id}`;
+    let query = `SELECT * FROM users WHERE user_id = '${req.params.id}'`;
     let db_promise = db_pool.promise();
     try {
-        res.status(200).json(await db_promise.query(Query));
+        res.status(200).json(await db_promise.query(query));
     }catch (err){
         return res.status(500).json({message: err});
     }
@@ -20,13 +24,14 @@ async function getById(req,res,next) {
 }
 async function addUser(req, res, next) {
     let { email, password } = req.body;
-    db.query(`SELECT * FROM users WHERE email = ${email}`, async (error, results) => {
+    let query = `SELECT * FROM users WHERE email = '${email}'`;
+    db_pool.query(query, async (error, results) => {
         if (error) throw error;
         if (results.length > 0) return res.status(400).json({ isExists: true }); // move to login page
 
         let hashedPassword = await bcrypt.hash(password, 10);
 
-        db.query(`INSERT INTO users (email, password) VALUES (${email}, ${hashedPassword})`, (error, results) => {
+        db_pool.query(`INSERT INTO users (email, password) VALUES ('${email}', '${hashedPassword}')`, (error, results) => {
             if (error) throw error;
             res.status(400).json({ affectedRows: results.affectedRows, insertId: results.insertId }); // redirect to login page
         })
@@ -35,7 +40,8 @@ async function addUser(req, res, next) {
 }
 async function login(req, res, next) {
     let { email, password } = req.body;
-    db.query(`SELECT * FROM users WHERE email = ${email}`, async (error, results) => {
+    let query = `SELECT * FROM users WHERE email = '${email}'`;
+    db_pool.query(query, async (error, results) => {
         if (error) throw error;
 
         if (results.length === 0) {
@@ -46,7 +52,7 @@ async function login(req, res, next) {
           if (!isMatch) {
             return res.status(400).json({ invalid:true });
           }
-          const token = jwt.sign({ email: user.email }, process.env.JWT, { expiresIn: '1h' });
+          const token = jwt.sign({ email: user.email }, JWT_KEY, { expiresIn: '1h' });
           res.status(200).json({ token });
     })
     next();    
